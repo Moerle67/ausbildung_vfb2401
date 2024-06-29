@@ -94,7 +94,7 @@ class Ausbildungseinheit(models.Model):
         verbose_name_plural = ("Ausbildungseinheiten")
 
     def __str__(self):
-        return f"{self.bezeichnung} - ({self.thema}/{self.ausbilder} {self.datum})"
+        return f"{self.bezeichnung} - ({self.thema}/{self.ausbilder} {self.datum.strftime('%d.%m.%Y/%H.%M')} Uhr)"
 
     def get_absolute_url(self):
         return reverse("ausbildungseinheit_detail", kwargs={"pk": self.pk})

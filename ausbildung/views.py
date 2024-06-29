@@ -4,6 +4,5 @@ from django.http import HttpResponse
 
 # Create your views here.
 
-def gruppe(request):
-    anzahl = Gruppe.objects.all().count()
-    return HttpResponse(f"<h1>{anzahl} Gruppen angelegt</h1>")
+def home(request):
+    return render(request, "start.html")
