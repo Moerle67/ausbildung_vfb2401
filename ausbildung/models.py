@@ -58,10 +58,59 @@ class Thema(models.Model):
 
     class Meta:
         verbose_name = ("Thema")
-        verbose_name_plural = ("Themas")
+        verbose_name_plural = ("Themen")
 
     def __str__(self):
         return self.bezeichnung
 
     def get_absolute_url(self):
         return reverse("Thema_detail", kwargs={"pk": self.pk})
+
+class Schueler(models.Model):
+    name = models.CharField(("Schüler"), max_length=250)
+    adresse = models.TextField(("Adresse"), blank=True, null=True)
+    gruppe = models.ForeignKey(Gruppe, verbose_name=("Gruppe"), on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = ("Schüler")
+        verbose_name_plural = ("Schüler")
+
+    def __str__(self):
+        return f"{self.name} ({self.gruppe.bezeichnung})"
+        
+    def get_absolute_url(self):
+        return reverse("Schueler_detail", kwargs={"pk": self.pk})
+
+class Ausbildungseinheit(models.Model):
+    bezeichnung = models.CharField(("Thema"), max_length=50)
+    thema = models.ForeignKey(Thema, verbose_name=("Thema"), on_delete=models.RESTRICT)
+    ausbilder = models.ForeignKey(Ausbilder, verbose_name=("Ausbilder"), on_delete=models.RESTRICT)
+    gruppe = models.ForeignKey(Gruppe, verbose_name=("Gruppe"), on_delete=models.RESTRICT)
+    datum = models.DateTimeField(("Datum"), auto_now=False, auto_now_add=False)
+    laenge = models.IntegerField(("Länge"))
+
+    class Meta:
+        verbose_name = ("Ausbildungseinheit")
+        verbose_name_plural = ("Ausbildungseinheiten")
+
+    def __str__(self):
+        return f"{self.bezeichnung} - ({self.thema}/{self.ausbilder} {self.datum})"
+
+    def get_absolute_url(self):
+        return reverse("ausbildungseinheit_detail", kwargs={"pk": self.pk})
+
+class Lernerfolgskontrolle(models.Model):
+    schueler = models.ForeignKey(Schueler, verbose_name=("Schüler"), on_delete=models.CASCADE)
+    thema = models.ForeignKey(Thema, verbose_name=("Thema"), on_delete=models.CASCADE)
+    datum = models.DateTimeField(("Datum"), auto_now=False, auto_now_add=False)
+    punkte = models.IntegerField(("Punkte"))
+
+    class Meta:
+        verbose_name = ("Lernerfolgskontrolle")
+        verbose_name_plural = ("Lernerfolgskontrollen")
+
+    def __str__(self):
+        return f"{self.schueler.name} - {self.thema.bezeichnung}"
+
+    def get_absolute_url(self):
+        return reverse("Lernerfolgskontrolle_detail", kwargs={"pk": self.pk})
