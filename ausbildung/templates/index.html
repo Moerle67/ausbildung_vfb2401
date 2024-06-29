@@ -1,0 +1,11 @@
+{% extends "start.html" %}
+
+{% block h1 %}{{h1}} - {{name}}{% endblock h1 %}
+
+{% block inhalt %}
+<ul>
+{% for thema in themen %}
+    <li>{{thema}}</li>
+{% endfor %}
+</ul>
+{% endblock inhalt %}
