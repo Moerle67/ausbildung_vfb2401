@@ -31,3 +31,37 @@ class Gruppe(models.Model):
 
     #def get_absolute_url(self):
     #    return reverse("Gruppe_detail", kwargs={"pk": self.pk})
+
+class Fach(models.Model):
+    bezeichnung = models.CharField(("Bezeichnung"), max_length=50)
+    inhalt = models.TextField(("Inhalt"))
+    hauptausbilder = models.ForeignKey(Ausbilder, verbose_name=("Hauptausbilder"), on_delete=models.RESTRICT)
+    # models.CASCADE - verbundene Datensätze Löschen
+    # models.PROTECT - DS kann erste gelöscht werden, wenn keine FK vorhanden sind (restrict)
+    # models.DO_NOTHING - Fehlerhafter FK bleibt erhalten (ignore)
+    # models.SET_NULL - FK wird auf NULL gesetzt
+
+    class Meta:
+        verbose_name = ("Fach")
+        verbose_name_plural = ("Fächer")
+
+    def __str__(self):
+        return self.bezeichnung
+
+    #def get_absolute_url(self):
+    #    return reverse("Fach_detail", kwargs={"pk": self.pk})
+class Thema(models.Model):
+    bezeichnung = models.CharField(("Bezeichnung"), max_length=50)
+    fach = models.ForeignKey(Fach, verbose_name=("Fach"), on_delete=models.RESTRICT)
+    inhalt = models.TextField(("Inhalt"))
+    laenge = models.IntegerField(("Länge"))
+
+    class Meta:
+        verbose_name = ("Thema")
+        verbose_name_plural = ("Themas")
+
+    def __str__(self):
+        return self.bezeichnung
+
+    def get_absolute_url(self):
+        return reverse("Thema_detail", kwargs={"pk": self.pk})
